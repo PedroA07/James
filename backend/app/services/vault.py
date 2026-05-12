@@ -5,7 +5,7 @@ from app.config import settings
 
 
 def _get_repo():
-    g = Github(settings.github_token)
+    g = Github(settings.github_token, timeout=10)
     return g.get_repo(settings.github_vault_repo)
 
 

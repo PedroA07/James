@@ -8,8 +8,12 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 
 
 @router.post("", response_model=ChatResponse)
-async def chat_endpoint(req: ChatRequest):
-    notes = search_notes_by_keyword(req.message, max_results=settings.max_context_notes)
+def chat_endpoint(req: ChatRequest):
+    try:
+        notes = search_notes_by_keyword(req.message, max_results=settings.max_context_notes)
+    except Exception:
+        notes = []
+
     context = format_notes_for_prompt(notes)
 
     reply, tokens = chat(
