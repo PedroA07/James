@@ -14,14 +14,23 @@ def _fetch_all_notes() -> list[dict]:
     repo = _get_repo()
     notes = []
 
+    SKIP_DIRS = {"node_modules", ".next", "__pycache__", ".git", "venv", ".venv"}
+
     def walk(path=""):
-        contents = repo.get_contents(path, ref=settings.github_vault_branch)
+        try:
+            contents = repo.get_contents(path, ref=settings.github_vault_branch)
+        except Exception:
+            return
         for item in contents:
             if item.type == "dir":
-                walk(item.path)
+                if item.name not in SKIP_DIRS:
+                    walk(item.path)
             elif item.name.endswith(".md"):
-                text = base64.b64decode(item.content).decode("utf-8", errors="ignore")
-                notes.append({"path": item.path, "content": text})
+                try:
+                    text = base64.b64decode(item.content).decode("utf-8", errors="ignore")
+                    notes.append({"path": item.path, "content": text})
+                except Exception:
+                    pass
 
     walk()
     return notes

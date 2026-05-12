@@ -48,7 +48,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-full" style={{ background: "#0f0f0f" }}>
+    <div className="flex flex-col" style={{ background: "#0f0f0f", height: "100dvh" }}>
       {/* Header */}
       <header
         className="flex items-center justify-between px-6 py-4 flex-shrink-0"
